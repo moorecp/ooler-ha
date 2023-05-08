@@ -1,0 +1,15 @@
+{
+  "domain": "ooler",
+  "name": "Ooler",
+  "codeowners": ["@moorecp"],
+  "dependencies": ["bluetooth_adapters"],
+  "documentation": "https://www.example.com",
+  "integration_type": "device",
+  "iot_class": "polling",
+  "requirements": [],
+  "bluetooth": [
+    {
+      "local_name": "OOLER*"
+    }
+  ]
+}
