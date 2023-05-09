@@ -1,11 +1,13 @@
 {
   "domain": "ooler",
   "name": "Ooler",
+  "version": "0.0.1",
+  "config_flow": true,
   "codeowners": ["@moorecp"],
   "dependencies": ["bluetooth_adapters"],
   "documentation": "https://www.example.com",
   "integration_type": "device",
-  "iot_class": "polling",
+  "iot_class": "local_polling",
   "requirements": [],
   "bluetooth": [
     {
