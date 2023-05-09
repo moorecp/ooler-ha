@@ -8,16 +8,16 @@
 # from homeassistant.helpers.typing import ConfigType
 # from homeassistant.util import Throttle
 
-# from .const import (
-#     _LOGGER,
-#     DOMAIN,
-#     PLATFORMS,
-# )
+from .const import (
+    _LOGGER,
+    DOMAIN,
+    PLATFORMS,
+)
 
 # MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=60)
 
 
-# async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+async def async_setup(hass, config):
 #     """Ecobee uses config flow for configuration.
 
 #     But, an "ecobee:" entry in configuration.yaml will trigger an import flow
@@ -27,7 +27,7 @@
 #     continue setting up the integration via the config flow.
 #     """
 
-#     hass.data[DATA_ECOBEE_CONFIG] = config.get(DOMAIN, {})
+    hass.data[DOMAIN] = config.get(DOMAIN, {})
 #     hass.data[DATA_HASS_CONFIG] = config
 
 #     if not hass.config_entries.async_entries(DOMAIN) and hass.data[DATA_ECOBEE_CONFIG]:
@@ -38,30 +38,18 @@
 #             )
 #         )
 
-#     return True
+    return True
 
 
-# async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-#     """Set up ecobee via a config entry."""
-#     api_key = entry.data[CONF_API_KEY]
-#     refresh_token = entry.data[CONF_REFRESH_TOKEN]
+async def async_setup_entry(hass, entry):
+    """Set up an Ooler."""
+    if hass.data[DOMAIN] is None:
+        hass.data[DOMAIN] = {}
+    _LOGGER.error("__init__ AES: {0}".format(entry.as_dict()))
+    hass.data[DOMAIN][entry.data["address"]] = {"address": entry.data["address"], "name": entry.title}
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-#     data = EcobeeData(hass, entry, api_key=api_key, refresh_token=refresh_token)
-
-#     if not await data.refresh():
-#         return False
-
-#     await data.update()
-
-#     if data.ecobee.thermostats is None:
-#         _LOGGER.error("No ecobee devices found to set up")
-#         return False
-
-#     hass.data[DOMAIN] = data
-
-#     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
-#     return True
+    return True
 
 
 # class OolerData:
@@ -87,9 +75,9 @@
 #         _LOGGER.debug("Updating Ooler")
 
 
-# async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-#     """Unload the config entry and platforms."""
-#     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-#     if unload_ok:
-#         hass.data.pop(DOMAIN)
-#     return unload_ok
+async def async_unload_entry(hass, entry):
+    """Unload the config entry and platforms."""
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if unload_ok:
+        hass.data.pop(DOMAIN)
+    return unload_ok
