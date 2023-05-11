@@ -8,7 +8,7 @@
 # from homeassistant.helpers.typing import ConfigType
 # from homeassistant.util import Throttle
 
-from ooler_py.Ooler import Ooler
+from .Ooler import Ooler
 from .const import (
     _LOGGER,
     DOMAIN,

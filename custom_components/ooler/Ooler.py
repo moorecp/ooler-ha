@@ -2,7 +2,7 @@ import asyncio
 from bleak import BleakClient, BleakScanner
 from collections import deque
 from threading import Thread
-from .const import (
+from .ooler_py_const import (
     CURRENT_TEMP_UUID,
     FAN_SPEED_UUID,
     POWER_UUID,

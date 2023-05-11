@@ -3,7 +3,7 @@ from homeassistant.config_entries import ConfigFlow
 from homeassistant.helpers import config_entry_flow
 
 from .const import _LOGGER, DOMAIN
-from ooler_py.Ooler import Ooler
+from .Ooler import Ooler
 
 class OolerConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Ooler."""
