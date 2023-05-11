@@ -17,12 +17,13 @@ from homeassistant.components.climate import (
     HVACMode,
 )
 from homeassistant.const import UnitOfTemperature
+from homeassistant.helpers.entity import DeviceInfo
 from .const import _LOGGER, DOMAIN, MANUFACTURER, MODEL
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up the Ooler."""
 
-    data = hass.data[DOMAIN]
+    data = hass.data[DOMAIN][config_entry.data["address"]]
     entities = []
 
     entities.append(OolerClimate(device_name=config_entry.title, address=config_entry.data["address"], data=data))
@@ -33,7 +34,7 @@ class OolerClimate(ClimateEntity):
     _attr_hvac_modes = [HVACMode.AUTO, HVACMode.OFF]
     _attr_target_temperature_step = 1
     _attr_temperature_unit = UnitOfTemperature.FAHRENHEIT
-    _attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.SUPPORT_FAN_MODE
+    _attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.FAN_MODE
     SCAN_INTERVAL = timedelta(seconds=60)
 
     def __init__(self, device_name, address, data):

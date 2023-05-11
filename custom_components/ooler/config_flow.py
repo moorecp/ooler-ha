@@ -19,7 +19,7 @@ class OolerConfigFlow(ConfigFlow, domain=DOMAIN):
                 return
         _LOGGER.error("Adding entry: {0}".format(discovery_info.name))
         data = self.hass.data[DOMAIN][discovery_info.address]
-        data["ooler"] = Ooler(discovery_info.address)
+        data["ooler"] = Ooler(self.hass, discovery_info.address)
         self.hass.data[DOMAIN][discovery_info.address] = data
 
         return self.async_create_entry(title=discovery_info.name, data={"address": discovery_info.address})

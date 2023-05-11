@@ -47,7 +47,7 @@ async def async_setup_entry(hass, entry):
     if hass.data[DOMAIN] is None:
         hass.data[DOMAIN] = {}
     _LOGGER.error("__init__ AES: {0}".format(entry.as_dict()))
-    hass.data[DOMAIN][entry.data["address"]] = {"address": entry.data["address"], "name": entry.title, "ooler": Ooler(address)}
+    hass.data[DOMAIN][entry.data["address"]] = {"address": entry.data["address"], "name": entry.title, "ooler": Ooler(hass, entry.data["address"])}
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True

@@ -1,5 +1,7 @@
 import asyncio
-from bleak import BleakClient, BleakScanner
+import logging
+from homeassistant.components import bluetooth
+from bleak import BleakClient#, BleakScanner
 from collections import deque
 from threading import Thread
 from .ooler_py_const import (
@@ -13,16 +15,18 @@ from .ooler_py_const import (
     WaterLevel,
 )
 
+_LOGGER = logging.getLogger(__package__)
 class Ooler:
-    def __init__(self, address):
+    def __init__(self, hass, address):
         self.address = address
+        self.hass = hass
         self.message_queue = deque([])
         self.current_temperature = 55
         self.fan_speed = FanSpeed.LOW
         self.power_status = PowerStatus.OFF
         self.temp_setpoint = 55
         self.water_level = WaterLevel.FULL
-
+        _LOGGER.error("Ooler address: {0}".format(address))
         self.update()
 
     async def enqueue_message(self, characteristic, value=None, callback=None):
@@ -39,7 +43,8 @@ class Ooler:
         print("Messages: {0}".format(len(self.message_queue)))
         try:
             message = self.message_queue.popleft()
-            device = await BleakScanner.find_device_by_address(self.address, timeout=25.0)
+            # device = await BleakScanner.find_device_by_address(self.address, timeout=25.0)
+            device = bluetooth.async_ble_device_from_address(self.hass, self.address, connectable=True)
             async with BleakClient(device, timeout=50.0) as client:
                 while True:
                     response = None

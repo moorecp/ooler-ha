@@ -16,7 +16,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     data = hass.data[DOMAIN][config_entry.data["address"]]
     entities = []
 
-    entities.append(OolerBinarySensor(device_name=config_entry.title, address=config_entry.data["address"], data=data))
+    entities.append(OolerLowWaterBinarySensor(device_name=config_entry.title, address=config_entry.data["address"], data=data))
     async_add_entities(entities, True)
 
 class OolerLowWaterBinarySensor(BinarySensorEntity):
